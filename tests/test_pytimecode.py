@@ -34,6 +34,17 @@ class PyTimeCodeTester(unittest.TestCase):
         PyTimeCode('ms', '03:36:09:230')
         PyTimeCode('24', start_timecode=None, frames=12000)
 
+        PyTimeCode('23.98')
+        PyTimeCode('24')
+        PyTimeCode('25')
+        PyTimeCode('29.97')
+        PyTimeCode('30')
+        PyTimeCode('50')
+        PyTimeCode('59.94')
+        PyTimeCode('60')
+        PyTimeCode('ms')
+        PyTimeCode('24', frames=12000)
+
     def test_repr_overload(self):
         timeobj = PyTimeCode('24', '01:00:00:00')
         self.assertEqual('01:00:00:00', timeobj.__repr__())
