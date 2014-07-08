@@ -8,7 +8,7 @@ README = open(os.path.join(here, 'README')).read()
 CHANGES = open(os.path.join(here, 'CHANGELOG')).read()
 
 setup(
-    name='pytimecode',
+    name='timecode',
     version='0.2.0',
     description="SMPTE Time Code Manipulation Library",
     long_description='%s\n\n%s' % (README, CHANGES),
