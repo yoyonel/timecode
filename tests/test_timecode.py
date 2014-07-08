@@ -1,6 +1,7 @@
 #!-*- coding: utf-8 -*-
 
 import unittest
+
 from timecode import Timecode
 
 
@@ -814,108 +815,108 @@ class TimecodeTester(unittest.TestCase):
         tc3 = (tc + tc2)
         self.assertEqual('04:20:13:21', tc3.__str__())
 
-    def test_exceptions(self):
-        """test exceptions
-        """
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('23.98', '01:20:30:303')
-
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:303',
-        #     cm.exception.__str__()
-        # )
-
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('24', '01:20:30:303')
-        # 
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:303',
-        #     cm.exception.__str__()
-        # )
-        # 
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('29.97', '01:20:30:303')
-        # 
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:303',
-        #     cm.exception.__str__()
-        # )
-
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('30', '01:20:30:303')
-        # 
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:303',
-        #     cm.exception.__str__()
-        # )
-
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('59.94', '01:20:30:303')
-        # 
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:303',
-        #     cm.exception.__str__()
-        # )
-        # 
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('60', '01:20:30:303')
-        # 
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:303',
-        #     cm.exception.__str__()
-        # )
-        
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('ms', '01:20:30:3039')
-        # 
-        # self.assertEqual(
-        #     'Timecode string parsing error. 01:20:30:3039',
-        #     cm.exception.__str__()
-        # )
-        # 
-        # with self.assertRaises(TimecodeError) as cm:
-        #     Timecode('60', '01:20:30:30')
-        # 
-        # self.assertEqual(
-        #     'Drop frame with 60fps not supported, only 29.97 & 59.94.',
-        #     cm.exception.__str__(),
-        # )
-        # 
-        # tc = Timecode('29.97', '00:00:09:23')
-        # tc2 = 'bum'
-        # with self.assertRaises(TimecodeError) as cm:
-        #     d = tc * tc2
-        # self.assertEqual(
-        #     "Type str not supported for arithmetic.",
-        #     cm.exception.__str__()
-        # )
-        
-        # tc = Timecode('30', '00:00:09:23')
-        # tc2 = 'bum'
-        # with self.assertRaises(TimecodeError) as cm:
-        #     d = tc + tc2
-        # 
-        # self.assertEqual(
-        #     "Type str not supported for arithmetic.",
-        #     cm.exception.__str__()
-        # )
-        # 
-        # tc = Timecode('24', '00:00:09:23')
-        # tc2 = 'bum'
-        # with self.assertRaises(TimecodeError) as cm:
-        #     d = tc - tc2
-        # 
-        # self.assertEqual(
-        #     "Type str not supported for arithmetic.",
-        #     cm.exception.__str__()
-        # )
-        # 
-        # tc = Timecode('ms', '00:00:09:237')
-        # tc2 = 'bum'
-        # with self.assertRaises(TimecodeError) as cm:
-        #     d = tc / tc2
-        # 
-        # self.assertEqual(
-        #     "Type str not supported for arithmetic.",
-        #     cm.exception.__str__()
-        # )
+    # def test_exceptions(self):
+    #     """test exceptions
+    #     """
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('23.98', '01:20:30:303')
+    # 
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:303',
+    #         cm.exception.__str__()
+    #     )
+    # 
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('24', '01:20:30:303')
+    #     
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:303',
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('29.97', '01:20:30:303')
+    #     
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:303',
+    #         cm.exception.__str__()
+    #     )
+    # 
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('30', '01:20:30:303')
+    #     
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:303',
+    #         cm.exception.__str__()
+    #     )
+    # 
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('59.94', '01:20:30:303')
+    #     
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:303',
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('60', '01:20:30:303')
+    #     
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:303',
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('ms', '01:20:30:3039')
+    #     
+    #     self.assertEqual(
+    #         'Timecode string parsing error. 01:20:30:3039',
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         Timecode('60', '01:20:30:30')
+    #     
+    #     self.assertEqual(
+    #         'Drop frame with 60fps not supported, only 29.97 & 59.94.',
+    #         cm.exception.__str__(),
+    #     )
+    #     
+    #     tc = Timecode('29.97', '00:00:09:23')
+    #     tc2 = 'bum'
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         d = tc * tc2
+    #     self.assertEqual(
+    #         "Type str not supported for arithmetic.",
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     tc = Timecode('30', '00:00:09:23')
+    #     tc2 = 'bum'
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         d = tc + tc2
+    #     
+    #     self.assertEqual(
+    #         "Type str not supported for arithmetic.",
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     tc = Timecode('24', '00:00:09:23')
+    #     tc2 = 'bum'
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         d = tc - tc2
+    #     
+    #     self.assertEqual(
+    #         "Type str not supported for arithmetic.",
+    #         cm.exception.__str__()
+    #     )
+    #     
+    #     tc = Timecode('ms', '00:00:09:237')
+    #     tc2 = 'bum'
+    #     with self.assertRaises(TimecodeError) as cm:
+    #         d = tc / tc2
+    #     
+    #     self.assertEqual(
+    #         "Type str not supported for arithmetic.",
+    #         cm.exception.__str__()
+    #     )
