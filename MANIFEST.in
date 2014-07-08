@@ -1,4 +1,4 @@
-include *.txt *.ini *.cfg *.rst
+include *.txt *.ini *.cfg *.rst *.py
 
 include CHANGELOG
 include TODO
@@ -6,7 +6,7 @@ include README
 include INSTALL
 include MANIFEST.in
 include LICENSE
-recursive-include alembic *
+include timecode.py
 recursive-include docs *
 recursive-include tests *
 
