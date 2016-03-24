@@ -815,6 +815,18 @@ class TimecodeTester(unittest.TestCase):
         tc3 = (tc + tc2)
         self.assertEqual('04:20:13:21', tc3.__str__())
 
+    def test_framerate_can_be_changed(self):
+        """testing if the timecode value will be automaticall updated when the
+        framerate attribute is changed
+        """
+        tc1 = Timecode('25', frames=100)
+        self.assertEqual('00:00:03:24', tc1.__str__())
+        self.assertEqual(100, tc1.frames)
+
+        tc1.framerate = '12'
+        self.assertEqual('00:00:08:03', tc1.__str__())
+        self.assertEqual(100, tc1.frames)
+
     # def test_exceptions(self):
     #     """test exceptions
     #     """
