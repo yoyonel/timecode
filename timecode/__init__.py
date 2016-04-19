@@ -177,7 +177,7 @@ class Timecode(object):
         frames_per_10_minutes = int(round(ffps * 60 * 10))
         # Number of frames per minute is the round of the framerate * 60 minus
         # the number of dropped frames
-        frames_per_minute = int(round(ffps)*60) - drop_frames
+        frames_per_minute = int(round(ffps) * 60) - drop_frames
 
         frame_number = frames - 1
 
