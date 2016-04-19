@@ -34,7 +34,8 @@ class Timecode(object):
         frames, then when required it converts the frames to a timecode by
         using the frame rate setting.
 
-        :param str framerate: The frame rate of the Timecode instance. It
+        :param [str int float] framerate:
+          The frame rate of the Timecode instance. It
           should be one of ['23.98', '24', '25', '29.97', '30', '50', '59.94',
           '60', 'ms'] where "ms" equals to 1000 fps. Can not be skipped.
           Setting the framerate will automatically set the :attr:`.drop_frame`
@@ -82,6 +83,11 @@ class Timecode(object):
         :param framerate:
         :return:
         """
+
+        # check if number is passed and if so convert it to a string
+        if isinstance(framerate, (int, float)):
+            framerate = str(framerate)
+
         # set the int_frame_rate
         if framerate == '29.97':
             self._int_framerate = 30
