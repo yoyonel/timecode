@@ -86,7 +86,9 @@ class Timecode(object):
 
         # check if number is passed and if so convert it to a string
         if isinstance(framerate, (int, float)):
-            framerate = str(framerate)
+            # filter out milliseconds logic
+            if framerate != 1000:
+                framerate = str(framerate)
 
         # set the int_frame_rate
         if framerate == '29.97':
