@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 
-__version__ = '0.3.1'
+__version__ = '0.4.0'
 
 
 class Timecode(object):
@@ -87,7 +87,6 @@ class Timecode(object):
 
         # check if number is passed and if so convert it to a string
         if isinstance(framerate, (int, float)):
-            # filter out milliseconds logic
             framerate = str(framerate)
 
         # set the int_frame_rate
@@ -217,7 +216,7 @@ class Timecode(object):
 
     @classmethod
     def parse_timecode(cls, timecode):
-        """parses timecode string frames '00:00:00:00' or '00:00:00;00' or
+        """parses timecode string NDF '00:00:00:00' or DF '00:00:00;00' or
         milliseconds '00:00:00.000'
         """
         bfr = timecode.replace(';', ':').replace('.', ':').split(':')
