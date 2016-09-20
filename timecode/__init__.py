@@ -90,6 +90,7 @@ class Timecode(object):
             self._int_framerate = 60
             self.drop_frame = True
         elif framerate == '23.98':
+            framerate = '24'
             self._int_framerate = 24
         elif framerate == 'ms':
             self._int_framerate = 1000
