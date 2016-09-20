@@ -2,6 +2,25 @@
 Changes
 =======
 
+0.4.0
+=====
+
+* **New:** Frame delimiter is now set to ":" for Non Drop Frame, ";" for Drop
+  Frame and "." for millisecond based time codes.
+  If ``Timecode.__init__()`` start_timecode is passed a string with the wrong
+  delimiter it will be converted automatically.
+
+* **Update:** All tests involving Drop Frame and millisecond time codes are now
+  set to use the new delimiter.
+
+* **New:** ``Timecode.tc_to_string()`` method added to present the correctly
+  formatted time code.
+
+* **New:** ``Timecode.ms_frame`` boolean attribute added.
+
+* **New:** ``Timecode.__init__()`` now supports strings, ints and floats for
+  the framerate argument.
+
 0.3.0
 =====
 
@@ -18,7 +37,7 @@ Changes
 
 * **Update:** Timecode.__init__() arguments has been changed, removed the
   unnecessary ``drop_frame``, ``iter_returns`` arguments.
-  
+
   Drop frame can be interpreted from the ``framerate`` argument and
   ``iter_returns`` is unnecessary cause any iteration on the object will return
   another ``Timecode`` instance.

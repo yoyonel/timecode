@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 
-__version__ = '0.3.1'
+__version__ = '0.4.0'
 
 
 class Timecode(object):
@@ -34,7 +34,7 @@ class Timecode(object):
         frames, then when required it converts the frames to a timecode by
         using the frame rate setting.
 
-        :param str framerate: The frame rate of the Timecode instance. It
+        :param framerate: The frame rate of the Timecode instance. It
           should be one of ['23.98', '24', '25', '29.97', '30', '50', '59.94',
           '60', 'ms'] where "ms" equals to 1000 fps. Can not be skipped.
           Setting the framerate will automatically set the :attr:`.drop_frame`
@@ -45,12 +45,14 @@ class Timecode(object):
           skipped then the start_second attribute will define the start
           timecode, and if start_seconds is also skipped then the default value
           of '00:00:00:00' will be used.
+        :type framerate: str or int or float
         :type start_timecode: str or None
         :param start_seconds: A float or integer value showing the seconds.
         :param int frames: Timecode objects can be initialized with an
           integer number showing the total frames.
         """
         self.drop_frame = False
+        self.ms_frame = False
         self._int_framerate = None
         self._framerate = None
         self.framerate = framerate
@@ -77,11 +79,16 @@ class Timecode(object):
         return self._framerate
 
     @framerate.setter
-    def framerate(self, framerate):
+    def framerate(self, framerate):  # lint:ok
         """setter for the framerate attribute
         :param framerate:
         :return:
         """
+
+        # check if number is passed and if so convert it to a string
+        if isinstance(framerate, (int, float)):
+            framerate = str(framerate)
+
         # set the int_frame_rate
         if framerate == '29.97':
             self._int_framerate = 30
@@ -92,8 +99,9 @@ class Timecode(object):
         elif framerate == '23.98':
             framerate = '24'
             self._int_framerate = 24
-        elif framerate == 'ms':
+        elif framerate in ['ms', '1000']:
             self._int_framerate = 1000
+            self.ms_frame = True
             framerate = 1000
         elif framerate == 'frames':
             self._int_framerate = 1
@@ -115,7 +123,8 @@ class Timecode(object):
     def tc_to_frames(self, timecode):
         """Converts the given timecode to frames
         """
-        hours, minutes, seconds, frames = map(int, timecode.split(':'))
+        hours, minutes, seconds, frames = map(int,
+                                              self.parse_timecode(timecode))
 
         ffps = float(self._framerate)
 
@@ -170,7 +179,7 @@ class Timecode(object):
         frames_per_10_minutes = int(round(ffps * 60 * 10))
         # Number of frames per minute is the round of the framerate * 60 minus
         # the number of dropped frames
-        frames_per_minute = int(round(ffps)*60) - drop_frames
+        frames_per_minute = int(round(ffps) * 60) - drop_frames
 
         frame_number = frames - 1
 
@@ -199,10 +208,17 @@ class Timecode(object):
 
         return hrs, mins, secs, frs
 
+    def tc_to_string(self, hrs, mins, secs, frs):
+        return "%02d:%02d:%02d%s%02d" % (hrs,
+                                         mins,
+                                         secs,
+                                         self.frame_delimiter,
+                                         frs)
+
     @classmethod
     def parse_timecode(cls, timecode):
-        """parses timecode string frames '00:00:00:00' or '00:00:00;00' or
-        milliseconds '00:00:00:000'
+        """parses timecode string NDF '00:00:00:00' or DF '00:00:00;00' or
+        milliseconds '00:00:00.000'
         """
         bfr = timecode.replace(';', ':').replace('.', ':').split(':')
         hrs = int(bfr[0])
@@ -210,6 +226,18 @@ class Timecode(object):
         secs = int(bfr[2])
         frs = int(bfr[3])
         return hrs, mins, secs, frs
+
+    @property
+    def frame_delimiter(self):
+        """Return correct symbol based on framerate."""
+        if self.drop_frame:
+            return ';'
+
+        elif self.ms_frame:
+            return '.'
+
+        else:
+            return ':'
 
     def __iter__(self):
         return self
@@ -283,8 +311,8 @@ class Timecode(object):
                 'Type %s not supported for arithmetic.' %
                 other.__class__.__name__
             )
-        return Timecode(self._framerate, start_timecode=None,
-                        frames=subtracted_frames)
+
+        return Timecode(self._framerate, frames=subtracted_frames)
 
     def __mul__(self, other):
         """returns new Timecode object with added timecodes"""
@@ -297,8 +325,8 @@ class Timecode(object):
                 'Type %s not supported for arithmetic.' %
                 other.__class__.__name__
             )
-        return Timecode(self._framerate, start_timecode=None,
-                        frames=multiplied_frames)
+
+        return Timecode(self._framerate, frames=multiplied_frames)
 
     def __div__(self, other):
         """returns new Timecode object with added timecodes"""
@@ -311,12 +339,11 @@ class Timecode(object):
                 'Type %s not supported for arithmetic.' %
                 other.__class__.__name__
             )
-        return Timecode(self._framerate, start_timecode=None,
-                        frames=div_frames)
+
+        return Timecode(self._framerate, frames=div_frames)
 
     def __repr__(self):
-        return "%02d:%02d:%02d:%02d" % \
-            self.frames_to_tc(self.frames)
+        return self.tc_to_string(*self.frames_to_tc(self.frames))
 
     @property
     def hrs(self):
