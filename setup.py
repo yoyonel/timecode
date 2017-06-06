@@ -2,6 +2,7 @@
 
 import os
 from setuptools import setup, find_packages
+import timecode
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README')).read()
@@ -9,7 +10,7 @@ CHANGES = open(os.path.join(here, 'CHANGELOG')).read()
 
 setup(
     name='timecode',
-    version='0.3.0',
+    version=timecode.__version__,
     description="SMPTE Time Code Manipulation Library",
     long_description='%s\n\n%s' % (README, CHANGES),
     classifiers=[
