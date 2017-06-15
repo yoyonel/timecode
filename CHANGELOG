@@ -2,6 +2,11 @@
 Changes
 =======
 
+0.4.1
+=====
+
+* **Fix:** Fixed a test that was testing overloaded operators.
+
 0.4.0
 =====
 
