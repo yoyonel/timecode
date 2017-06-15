@@ -717,13 +717,14 @@ class TimecodeTester(unittest.TestCase):
 
         tc = Timecode('23.98', '03:36:09:23')
         tc2 = Timecode('23.98', '00:00:29:23')
-        self.assertEqual(720, tc2.frames)
+        self.assertEqual(tc.frames, 311280)
+        self.assertEqual(tc2.frames, 720)
         d = tc * tc2
         f = tc * 720
-        self.assertEqual("04:09:35:23", d.__str__())
         self.assertEqual(224121600, d.frames)
-        self.assertEqual("04:09:35:23", f.__str__())
+        self.assertEqual("01:59:59:23", d.__str__())
         self.assertEqual(224121600, f.frames)
+        self.assertEqual("01:59:59:23", f.__str__())
 
         tc = Timecode('ms', '03:36:09.230')
         tc2 = Timecode('ms', '01:06:09.230')
