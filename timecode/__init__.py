@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 
-__version__ = '0.4.2'
+__version__ = '0.4.3'
 
 
 class Timecode(object):
@@ -53,6 +53,7 @@ class Timecode(object):
         """
         self.drop_frame = False
         self.ms_frame = False
+        self.fraction_frame = False
         self._int_framerate = None
         self._framerate = None
         self.framerate = framerate
@@ -124,7 +125,8 @@ class Timecode(object):
         """Converts the given timecode to frames
         """
         hours, minutes, seconds, frames = map(int,
-                                              self.parse_timecode(timecode))
+                                              self.parse_timecode(timecode)
+                                              )
 
         ffps = float(self._framerate)
 
@@ -147,6 +149,13 @@ class Timecode(object):
 
         # Total number of minutes
         total_minutes = (60 * hours) + minutes
+
+        # Handle case where frames are fractions of a second
+        if len(timecode.split('.')) == 2 and not self.ms_frame:
+            self.fraction_frame = True
+            fraction = timecode.rsplit('.', 1)[1]
+
+            frames = int(round(float('.' + fraction) * ffps))
 
         frame_number = \
             ((hour_frames * hours) + (minute_frames * minutes) +
@@ -225,6 +234,7 @@ class Timecode(object):
         mins = int(bfr[1])
         secs = int(bfr[2])
         frs = int(bfr[3])
+
         return hrs, mins, secs, frs
 
     @property
@@ -280,6 +290,28 @@ class Timecode(object):
             return self.__eq__(new_tc)
         elif isinstance(other, int):
             return self.frames == other
+
+    def __ge__(self, other):
+        """override greater or equal to operator"""
+        if isinstance(other, Timecode):
+            return self._framerate == other._framerate and \
+                self.frames >= other.frames
+        elif isinstance(other, str):
+            new_tc = Timecode(self._framerate, other)
+            return self.frames >= new_tc.frames
+        elif isinstance(other, int):
+            return self.frames >= other
+
+    def __le__(self, other):
+        """override less or equal to operator"""
+        if isinstance(other, Timecode):
+            return self._framerate == other._framerate and \
+                self.frames <= other.frames
+        elif isinstance(other, str):
+            new_tc = Timecode(self._framerate, other)
+            return self.frames <= new_tc.frames
+        elif isinstance(other, int):
+            return self.frames <= other
 
     def __add__(self, other):
         """returns new Timecode instance with the given timecode or frames
