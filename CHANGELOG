@@ -2,6 +2,15 @@
 Changes
 =======
 
+0.4.3
+=====
+
+* **New:** added __ge__ and __le__ methods for better comparison between two
+  timecodes.
+
+* **New:** Added support for fractional seconds in the frame field as used in
+  ffmpeg's duration for instance.
+
 0.4.2
 =====
 
