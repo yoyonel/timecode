@@ -210,7 +210,11 @@ class Timecode(object):
                 frame_number += drop_frames * 9 * d
 
         ifps = self._int_framerate
+
         frs = frame_number % ifps
+        if self.fraction_frame:
+            frs = int(str(frs / float(ifps))[2:])
+
         secs = (frame_number // ifps) % 60
         mins = ((frame_number // ifps) // 60) % 60
         hrs = (((frame_number // ifps) // 60) // 60)
@@ -243,7 +247,7 @@ class Timecode(object):
         if self.drop_frame:
             return ';'
 
-        elif self.ms_frame:
+        elif self.ms_frame or self.fraction_frame:
             return '.'
 
         else:
