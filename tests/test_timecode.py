@@ -68,6 +68,14 @@ class TimecodeTester(unittest.TestCase):
         Timecode(1000)
         Timecode(24, frames=12000)
 
+        Timecode(24.0)
+        Timecode(25.0)
+        Timecode(30.0)
+        Timecode(50.0)
+        Timecode(60.0)
+        Timecode(1000.0)
+        Timecode(24.0, frames=12000)
+
     def test_repr_overload(self):
         timeobj = Timecode('24', '01:00:00:00')
         self.assertEqual('01:00:00:00', timeobj.__repr__())

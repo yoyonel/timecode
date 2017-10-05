@@ -106,7 +106,7 @@ class Timecode(object):
         elif framerate == 'frames':
             self._int_framerate = 1
         else:
-            self._int_framerate = int(framerate)
+            self._int_framerate = int(float(framerate))
 
         self._framerate = framerate
 
