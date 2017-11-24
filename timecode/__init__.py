@@ -36,7 +36,8 @@ class Timecode(object):
 
         :param framerate: The frame rate of the Timecode instance. It
           should be one of ['23.98', '24', '25', '29.97', '30', '50', '59.94',
-          '60', 'ms'] where "ms" equals to 1000 fps. Can not be skipped.
+          '60', 'NUMERATOR/DENOMINATOR', ms'] where "ms" equals to 1000 fps.
+          Can not be skipped.
           Setting the framerate will automatically set the :attr:`.drop_frame`
           attribute to correct value.
         :param start_timecode: The start timecode. Use this to be able to
@@ -85,6 +86,11 @@ class Timecode(object):
         :param framerate:
         :return:
         """
+
+        # Convert rational framerate to float
+        if isinstance(framerate, basestring) and '/' in framerate:
+            numerator, denominator = framerate.split('/')
+            framerate = round(float(numerator) / float(denominator), 2)
 
         # check if number is passed and if so convert it to a string
         if isinstance(framerate, (int, float)):
