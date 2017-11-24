@@ -922,6 +922,26 @@ class TimecodeTester(unittest.TestCase):
         self.assertEqual(tc1.frame_number, 40)
         self.assertEqual(tc2.frame_number, 1)
 
+    def test_ge_overload(self):
+        tc1 = Timecode(24, '00:00:00:00')
+        tc2 = Timecode(24, '00:00:00:00')
+        tc3 = Timecode(24, '00:00:00:01')
+
+        self.assertTrue(tc1 == tc2)
+        self.assertTrue(tc1 >= tc2)
+        self.assertTrue(tc3 >= tc2)
+        self.assertFalse(tc2 >= tc3)
+
+    def test_le_overload(self):
+        tc1 = Timecode(24, '00:00:00:00')
+        tc2 = Timecode(24, '00:00:00:00')
+        tc3 = Timecode(24, '00:00:00:01')
+
+        self.assertTrue(tc1 == tc2)
+        self.assertTrue(tc1 <= tc2)
+        self.assertTrue(tc2 <= tc3)
+        self.assertFalse(tc2 >= tc3)
+
 
     # def test_exceptions(self):
     #     """test exceptions
