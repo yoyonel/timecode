@@ -87,10 +87,13 @@ class Timecode(object):
         :return:
         """
 
-        # Convert rational framerate to float
+        # Convert rational frame rate to float
         if isinstance(framerate, basestring) and '/' in framerate:
             numerator, denominator = framerate.split('/')
             framerate = round(float(numerator) / float(denominator), 2)
+
+            if framerate.is_integer():
+                framerate = int(framerate)
 
         # check if number is passed and if so convert it to a string
         if isinstance(framerate, (int, float)):
@@ -219,7 +222,7 @@ class Timecode(object):
 
         frs = frame_number % ifps
         if self.fraction_frame:
-            frs = int(str(frs / float(ifps))[2:])
+            frs = round(frs / float(ifps), 3)
 
         secs = (frame_number // ifps) % 60
         mins = ((frame_number // ifps) // 60) % 60
@@ -228,16 +231,26 @@ class Timecode(object):
         return hrs, mins, secs, frs
 
     def tc_to_string(self, hrs, mins, secs, frs):
-        return "%02d:%02d:%02d%s%02d" % (hrs,
-                                         mins,
-                                         secs,
-                                         self.frame_delimiter,
-                                         frs)
+        if self.fraction_frame:
+            return "{hh:02d}:{mm:02d}:{ss:06.3f}" .format(hh=hrs,
+                                                          mm=mins,
+                                                          ss=secs + frs
+                                                          )
+
+        ff = "%02d"
+        if self.ms_frame:
+            ff = "%03d"
+
+        return ("%02d:%02d:%02d%s" + ff) % (hrs,
+                                            mins,
+                                            secs,
+                                            self.frame_delimiter,
+                                            frs)
 
     @classmethod
     def parse_timecode(cls, timecode):
         """parses timecode string NDF '00:00:00:00' or DF '00:00:00;00' or
-        milliseconds '00:00:00.000'
+        milliseconds/fractionofseconds '00:00:00.000'
         """
         bfr = timecode.replace(';', ':').replace('.', ':').split(':')
         hrs = int(bfr[0])
@@ -343,7 +356,7 @@ class Timecode(object):
         return tc
 
     def __sub__(self, other):
-        """returns new Timecode object with added timecodes"""
+        """returns new Timecode instance with subtracted value"""
         if isinstance(other, Timecode):
             subtracted_frames = self.frames - other.frames
         elif isinstance(other, int):
@@ -357,7 +370,7 @@ class Timecode(object):
         return Timecode(self._framerate, frames=subtracted_frames)
 
     def __mul__(self, other):
-        """returns new Timecode object with added timecodes"""
+        """returns new Timecode instance with multiplied value"""
         if isinstance(other, Timecode):
             multiplied_frames = self.frames * other.frames
         elif isinstance(other, int):
@@ -371,7 +384,7 @@ class Timecode(object):
         return Timecode(self._framerate, frames=multiplied_frames)
 
     def __div__(self, other):
-        """returns new Timecode object with added timecodes"""
+        """returns new Timecode instance with divided value"""
         if isinstance(other, Timecode):
             div_frames = self.frames / other.frames
         elif isinstance(other, int):
