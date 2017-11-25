@@ -1,10 +1,12 @@
 =======
 Changes
 =======
+
 1.0.0
 =====
 
-* **New:** Added support for passing rational frame rate. 24000/1001 for 23.97 etc.
+* **New:** Added support for passing rational frame rate. 24000/1001 for 23.97
+  etc.
 
 * **New:** Added tests for new functionality. Fractional seconds and
   rational frame rates.
