@@ -10,5 +10,4 @@ docs/doctrees/*
 docs/source/generated/*
 dist/*
 build/*
-upload_to_pypi*
 include/*
