@@ -45,6 +45,13 @@ class TimecodeTester(unittest.TestCase):
         Timecode('60')
         Timecode('ms')
 
+        Timecode('24000/1000', '00:00:00:00')
+        Timecode('24000/1001', '00:00:00;00')
+        Timecode('30000/1000', '00:00:00:00')
+        Timecode('30000/1001', '00:00:00;00')
+        Timecode('60000/1000', '00:00:00:00')
+        Timecode('60000/1001', '00:00:00;00')
+
         Timecode(24, frames=12000)
         Timecode(23.98, '00:00:00:00')
         Timecode(24, '00:00:00:00')
@@ -67,6 +74,14 @@ class TimecodeTester(unittest.TestCase):
         Timecode(60)
         Timecode(1000)
         Timecode(24, frames=12000)
+
+        Timecode(24.0)
+        Timecode(25.0)
+        Timecode(30.0)
+        Timecode(50.0)
+        Timecode(60.0)
+        Timecode(1000.0)
+        Timecode(24.0, frames=12000)
 
     def test_repr_overload(self):
         timeobj = Timecode('24', '01:00:00:00')
@@ -865,6 +880,76 @@ class TimecodeTester(unittest.TestCase):
         tc1.framerate = '12'
         self.assertEqual('00:00:08:03', tc1.__str__())
         self.assertEqual(100, tc1.frames)
+
+    def test_rational_framerate_convertions(self):
+        tc = Timecode('24000/1000', '00:00:00:00')
+        self.assertEqual(tc.framerate, '24')
+        self.assertEqual(tc._int_framerate, 24)
+
+        tc = Timecode('24000/1001', '00:00:00;00')
+        self.assertEqual(tc.framerate, '24')
+        self.assertEqual(tc._int_framerate, 24)
+
+        tc = Timecode('30000/1000', '00:00:00:00')
+        self.assertEqual(tc.framerate, '30')
+        self.assertEqual(tc._int_framerate, 30)
+
+        tc = Timecode('30000/1001', '00:00:00;00')
+        self.assertEqual(tc.framerate, '29.97')
+        self.assertEqual(tc._int_framerate, 30)
+
+        tc = Timecode('60000/1000', '00:00:00:00')
+        self.assertEqual(tc.framerate, '60')
+        self.assertEqual(tc._int_framerate, 60)
+
+        tc = Timecode('60000/1001', '00:00:00;00')
+        self.assertEqual(tc.framerate, '59.94')
+        self.assertEqual(tc._int_framerate, 60)
+
+    def test_rational_frame_delimiter(self):
+        tc = Timecode('24000/1000', frames=1)
+        self.assertFalse(';' in tc.__repr__())
+
+        tc = Timecode('24000/1001', frames=1)
+        self.assertFalse(';' in tc.__repr__())
+
+        tc = Timecode('30000/1001', frames=1)
+        self.assertTrue(';' in tc.__repr__())
+
+    def test_ms_vs_fraction_frames(self):
+        tc1 = Timecode('ms', '00:00:00.040')
+        self.assertTrue(tc1.ms_frame)
+        self.assertFalse(tc1.fraction_frame)
+
+        tc2 = Timecode(24, '00:00:00.042')
+        self.assertTrue(tc2.fraction_frame)
+        self.assertFalse(tc2.ms_frame)
+
+        self.assertNotEqual(tc1, tc2)
+
+        self.assertEqual(tc1.frame_number, 40)
+        self.assertEqual(tc2.frame_number, 1)
+
+    def test_ge_overload(self):
+        tc1 = Timecode(24, '00:00:00:00')
+        tc2 = Timecode(24, '00:00:00:00')
+        tc3 = Timecode(24, '00:00:00:01')
+
+        self.assertTrue(tc1 == tc2)
+        self.assertTrue(tc1 >= tc2)
+        self.assertTrue(tc3 >= tc2)
+        self.assertFalse(tc2 >= tc3)
+
+    def test_le_overload(self):
+        tc1 = Timecode(24, '00:00:00:00')
+        tc2 = Timecode(24, '00:00:00:00')
+        tc3 = Timecode(24, '00:00:00:01')
+
+        self.assertTrue(tc1 == tc2)
+        self.assertTrue(tc1 <= tc2)
+        self.assertTrue(tc2 <= tc3)
+        self.assertFalse(tc2 >= tc3)
+
 
     # def test_exceptions(self):
     #     """test exceptions
