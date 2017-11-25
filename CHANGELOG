@@ -17,9 +17,9 @@ Changes
 * **New:** Added support for fractional seconds in the frame field as used in
   ffmpeg's duration for instance.
 
-* **Important:** When passing frational second style timecode, the Timecode.frs
-  will return a float representing the fration of a second.
-  This is a major change for people expecting int values
+* **Important:** When passing fractional second style timecode, the
+  Timecode.frs will return a float representing the fraction of a second. This
+  is a major change for people expecting int values
 
 0.4.2
 =====
