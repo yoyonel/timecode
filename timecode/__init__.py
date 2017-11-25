@@ -46,6 +46,9 @@ class Timecode(object):
           skipped then the start_second attribute will define the start
           timecode, and if start_seconds is also skipped then the default value
           of '00:00:00:00' will be used.
+          When using 'ms' frame rate, timecodes like '00:11:01.040' use '.040'
+          as frame number. When used with other frame rates, '.040' represents
+          a fraction of a second. So '00:00:00.040'@24fps is 1 frame.
         :type framerate: str or int or float
         :type start_timecode: str or None
         :param start_seconds: A float or integer value showing the seconds.
@@ -116,7 +119,7 @@ class Timecode(object):
         elif framerate == 'frames':
             self._int_framerate = 1
         else:
-            self._int_framerate = int(float(framerate))
+            self._int_framerate = int(framerate)
 
         self._framerate = framerate
 
