@@ -11,7 +11,6 @@ Changes
   Example: ``Timecode(24, 421729315) -> 19:23:14:23``
   https://en.wikipedia.org/wiki/SMPTE_timecode
 
-
 1.0.1
 =====
 
