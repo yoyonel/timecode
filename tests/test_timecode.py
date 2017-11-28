@@ -172,6 +172,18 @@ class TimecodeTester(unittest.TestCase):
         tc = Timecode('59.94', frames=5178817)
         self.assertEqual('00:00:00;00', tc.__str__())
 
+    def test_start_seconds_argument_is_zero(self):
+        """testing if a ValueError will be raised when the start_seconds
+        parameters is zero.
+        """
+        with self.assertRaises(ValueError) as cm:
+            tc = Timecode('29.97', start_seconds=0)
+
+        self.assertEqual(
+            str(cm.exception),
+            '``start_seconds`` argument can not be 0'
+        )
+
     def test_frame_to_tc(self):
         tc = Timecode('29.97', '00:00:00;01')
         self.assertEqual(0, tc.hrs)
@@ -870,7 +882,7 @@ class TimecodeTester(unittest.TestCase):
         self.assertEqual('04:20:13;21', tc3.__str__())
 
     def test_framerate_can_be_changed(self):
-        """testing if the timecode value will be automaticall updated when the
+        """testing if the timecode value will be automatically updated when the
         framerate attribute is changed
         """
         tc1 = Timecode('25', frames=100)
@@ -881,7 +893,7 @@ class TimecodeTester(unittest.TestCase):
         self.assertEqual('00:00:08:03', tc1.__str__())
         self.assertEqual(100, tc1.frames)
 
-    def test_rational_framerate_convertions(self):
+    def test_rational_framerate_conversions(self):
         tc = Timecode('24000/1000', '00:00:00:00')
         self.assertEqual(tc.framerate, '24')
         self.assertEqual(tc._int_framerate, 24)

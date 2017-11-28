@@ -2,6 +2,12 @@
 Changes
 =======
 
+1.0.1
+=====
+
+* **Update:** To prevent confusion, passing 0 for ``start_seconds`` argument
+  will raise a ValueError now in ``Timecode.__init__` method.
+
 1.0.0
 =====
 

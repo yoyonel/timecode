@@ -22,39 +22,40 @@
 # THE SOFTWARE.
 
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 
 class Timecode(object):
+    """The main timecode class.
+
+    Does all the calculation over frames, so the main data it holds is
+    frames, then when required it converts the frames to a timecode by
+    using the frame rate setting.
+
+    :param framerate: The frame rate of the Timecode instance. It
+      should be one of ['23.98', '24', '25', '29.97', '30', '50', '59.94',
+      '60', 'NUMERATOR/DENOMINATOR', ms'] where "ms" equals to 1000 fps.
+      Can not be skipped.
+      Setting the framerate will automatically set the :attr:`.drop_frame`
+      attribute to correct value.
+    :param start_timecode: The start timecode. Use this to be able to
+      set the timecode of this Timecode instance. It can be skipped and
+      then the frames attribute will define the timecode, and if it is also
+      skipped then the start_second attribute will define the start
+      timecode, and if start_seconds is also skipped then the default value
+      of '00:00:00:00' will be used.
+      When using 'ms' frame rate, timecodes like '00:11:01.040' use '.040'
+      as frame number. When used with other frame rates, '.040' represents
+      a fraction of a second. So '00:00:00.040'@25fps is 1 frame.
+    :type framerate: str or int or float
+    :type start_timecode: str or None
+    :param start_seconds: A float or integer value showing the seconds.
+    :param int frames: Timecode objects can be initialized with an
+      integer number showing the total frames.
+    """
+
     def __init__(self, framerate, start_timecode=None, start_seconds=None,
                  frames=None):
-        """The main timecode class.
-
-        Does all the calculation over frames, so the main data it holds is
-        frames, then when required it converts the frames to a timecode by
-        using the frame rate setting.
-
-        :param framerate: The frame rate of the Timecode instance. It
-          should be one of ['23.98', '24', '25', '29.97', '30', '50', '59.94',
-          '60', 'NUMERATOR/DENOMINATOR', ms'] where "ms" equals to 1000 fps.
-          Can not be skipped.
-          Setting the framerate will automatically set the :attr:`.drop_frame`
-          attribute to correct value.
-        :param start_timecode: The start timecode. Use this to be able to
-          set the timecode of this Timecode instance. It can be skipped and
-          then the frames attribute will define the timecode, and if it is also
-          skipped then the start_second attribute will define the start
-          timecode, and if start_seconds is also skipped then the default value
-          of '00:00:00:00' will be used.
-          When using 'ms' frame rate, timecodes like '00:11:01.040' use '.040'
-          as frame number. When used with other frame rates, '.040' represents
-          a fraction of a second. So '00:00:00.040'@25fps is 1 frame.
-        :type framerate: str or int or float
-        :type start_timecode: str or None
-        :param start_seconds: A float or integer value showing the seconds.
-        :param int frames: Timecode objects can be initialized with an
-          integer number showing the total frames.
-        """
         self.drop_frame = False
         self.ms_frame = False
         self.fraction_frame = False
@@ -72,6 +73,8 @@ class Timecode(object):
             if frames is not None:  # because 0==False, and frames can be 0
                 self.frames = frames
             elif start_seconds is not None:
+                if start_seconds == 0:
+                    raise ValueError("``start_seconds`` argument can not be 0")
                 self.frames = self.float_to_tc(start_seconds)
             else:
                 # use default value of 00:00:00:00
