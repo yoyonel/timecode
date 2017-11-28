@@ -2,6 +2,16 @@
 Changes
 =======
 
+1.1.0
+=====
+
+* **New:** Support for passing "binary coded decimal" (BCD) integer to
+  timecode argument as it's stored in certain formats like OpenEXR and DPX.
+  Useful for parsing timecode from metadata through OpenImageIO for instance.
+  Example: ``Timecode(24, 421729315) -> 19:23:14:23``
+  https://en.wikipedia.org/wiki/SMPTE_timecode
+
+
 1.0.1
 =====
 

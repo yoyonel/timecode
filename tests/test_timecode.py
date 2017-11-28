@@ -45,6 +45,16 @@ class TimecodeTester(unittest.TestCase):
         Timecode('60')
         Timecode('ms')
 
+        Timecode('23.98', 421729315)
+        Timecode('24', 421729315)
+        Timecode('25', 421729315)
+        Timecode('29.97', 421729315)
+        Timecode('30', 421729315)
+        Timecode('50', 421729315)
+        Timecode('59.94', 421729315)
+        Timecode('60', 421729315)
+        Timecode('ms', 421729315)
+
         Timecode('24000/1000', '00:00:00:00')
         Timecode('24000/1001', '00:00:00;00')
         Timecode('30000/1000', '00:00:00:00')
@@ -74,14 +84,6 @@ class TimecodeTester(unittest.TestCase):
         Timecode(60)
         Timecode(1000)
         Timecode(24, frames=12000)
-
-        Timecode(24.0)
-        Timecode(25.0)
-        Timecode(30.0)
-        Timecode(50.0)
-        Timecode(60.0)
-        Timecode(1000.0)
-        Timecode(24.0, frames=12000)
 
     def test_repr_overload(self):
         timeobj = Timecode('24', '01:00:00:00')
@@ -171,6 +173,13 @@ class TimecodeTester(unittest.TestCase):
 
         tc = Timecode('59.94', frames=5178817)
         self.assertEqual('00:00:00;00', tc.__str__())
+
+        tc = Timecode('25', 421729315)
+        self.assertEqual('19:23:14:23', tc.__str__())
+
+        tc = Timecode('29.97', 421729315)
+        self.assertEqual('19:23:14;23', tc.__str__())
+        self.assertTrue(tc.drop_frame)
 
     def test_start_seconds_argument_is_zero(self):
         """testing if a ValueError will be raised when the start_seconds

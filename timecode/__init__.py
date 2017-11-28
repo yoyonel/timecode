@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 
 class Timecode(object):
@@ -103,7 +103,7 @@ class Timecode(object):
 
         # check if number is passed and if so convert it to a string
         if isinstance(framerate, (int, float)):
-            framerate = str(framerate)
+            framerate = str(round(framerate, 2))
 
         # set the int_frame_rate
         if framerate == '29.97':
@@ -142,6 +142,13 @@ class Timecode(object):
         hours, minutes, seconds, frames = map(int,
                                               self.parse_timecode(timecode)
                                               )
+
+        if isinstance(timecode, int):
+            time_tokens = [hours, minutes, seconds, frames]
+            timecode = ':'.join(str(t) for t in time_tokens)
+
+            if self.drop_frame:
+                timecode = ';'.join(timecode.rsplit(':', 1))
 
         ffps = float(self._framerate)
 
@@ -258,11 +265,16 @@ class Timecode(object):
         """parses timecode string NDF '00:00:00:00' or DF '00:00:00;00' or
         milliseconds/fractionofseconds '00:00:00.000'
         """
-        bfr = timecode.replace(';', ':').replace('.', ':').split(':')
-        hrs = int(bfr[0])
-        mins = int(bfr[1])
-        secs = int(bfr[2])
-        frs = int(bfr[3])
+        if isinstance(timecode, int):
+            indices = range(2, 10, 2)
+            hrs, mins, secs, frs = [hex(timecode)[i:i + 2] for i in indices]
+
+        else:
+            bfr = timecode.replace(';', ':').replace('.', ':').split(':')
+            hrs = int(bfr[0])
+            mins = int(bfr[1])
+            secs = int(bfr[2])
+            frs = int(bfr[3])
 
         return hrs, mins, secs, frs
 
